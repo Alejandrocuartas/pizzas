@@ -1,0 +1,46 @@
+type Query {
+    soldUnits(period: TimePeriod!): UnitSold!
+    ingredientsUsed(period: TimePeriod!): IngredientUsed!
+    totalSales(period: TimePeriod!): Sales!
+    ingredientsCost(period: TimePeriod!): IngredientCosts!
+}
+
+input TimePeriod {
+    startMonth: String!
+    startDay: String!
+    endMonth: String!
+    endDay: String!
+    week: Int
+}
+
+type UnitSold {
+    peperoni: Int!
+    branco: Int!
+    allDressed: Int!
+}
+
+type Sales {
+    peperoni: String!
+    branco: String!
+    allDressed: String!
+}
+
+type IngredientCosts {
+    peperoni: Ingredients!
+    branco: Ingredients!
+    allDressed: Ingredients!
+}
+
+type IngredientUsed {
+    peperoni: Ingredients!
+    branco: Ingredients!
+    allDressed: Ingredients!
+}
+
+type Ingredients {
+    peperoniSlice: String!
+    cheese: String!
+    vedgetable: String!
+    dough: String!
+    sauce: String!
+}
