@@ -1,16 +1,26 @@
-import { TimePeriod } from "../../types";
+import { SalesTotal, TimePeriod, UnitSold } from "../../types";
 import { totalSoldUnits } from "../../use-cases/soldUnits";
+import { totalSold } from "../../use-cases/totalSales";
 
 const soldUnits = (
     parent: unknown,
     args: {period:TimePeriod},
     context: any
-): any => {
+): Promise<UnitSold> => {
     return totalSoldUnits(args.period)
+};
+
+const totalSales = (
+    parent: unknown,
+    args: {period:TimePeriod},
+    context: any
+): Promise<SalesTotal> => {
+    return totalSold(args.period)
 };
 
 export default {
     Query: {
         soldUnits,
+        totalSales
     },
 };
