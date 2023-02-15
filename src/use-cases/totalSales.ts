@@ -40,7 +40,6 @@ export const totalSold = async(period: TimePeriod): Promise<SalesTotal> => {
         })
     }
     const prices = await orm.price.findMany()
-    console.log(prices)
     if(sum._sum.alldressed && sum._sum.branco && sum._sum.peperoni){
         const salesPeperoni = sum._sum.peperoni*prices[0].price
         const salesBranco = sum._sum.branco*prices[1].price
