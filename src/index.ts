@@ -21,6 +21,7 @@ export const server = new ApolloServer({
         };
     },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    introspection: true
 });
 
 export const runServer = async() => {
