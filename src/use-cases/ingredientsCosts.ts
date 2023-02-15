@@ -2,7 +2,7 @@ import {PrismaClient} from "@prisma/client"
 import { IngredientUsed, SalesTotal, TimePeriod } from "../types"
 const orm = new PrismaClient()
 
-export const totalIngredientUsed = async(period: TimePeriod): Promise<IngredientUsed> => {
+export const totalIngredientCost = async(period: TimePeriod): Promise<IngredientUsed> => {
     const endDate = new Date(`2022-${period.endMonth}-${period.endDay}`)
     const startDate = new Date(`2022-${period.startMonth}-${period.startDay}`)
     let moreWeeks;
@@ -39,29 +39,33 @@ export const totalIngredientUsed = async(period: TimePeriod): Promise<Ingredient
             }
         })
     }
+    const costs = (await orm.ingredientCosts.findMany()).map(i => i.cost)
+    const costsNumber = costs.map(c => {
+        return Number(c.split("$")[1])
+    })
     const recipes = await orm.recipe.findMany()
     if(sum._sum.alldressed && sum._sum.branco && sum._sum.peperoni){
         return {
             peperoni: {
-                peperoniSlice: `${recipes[3].peperoni*sum._sum.peperoni} ${recipes[3].name} ${recipes[3].unit}`,
-                cheese: `${recipes[2].peperoni*sum._sum.peperoni} ${recipes[2].name} ${recipes[2].unit}`,
-                vedgetable: `${recipes[4].peperoni*sum._sum.peperoni} ${recipes[4].name} ${recipes[4].unit}`,
-                dough: `${recipes[1].peperoni*sum._sum.peperoni} ${recipes[1].name} ${recipes[1].unit}`,
-                sauce: `${recipes[0].peperoni*sum._sum.peperoni} ${recipes[0].name} ${recipes[0].unit}`,
+                peperoniSlice: `$${recipes[3].peperoni*sum._sum.peperoni*costsNumber[2]}`,
+                cheese: `$${recipes[2].peperoni*sum._sum.peperoni*costsNumber[0]}`,
+                vedgetable: `$${recipes[4].peperoni*sum._sum.peperoni*costsNumber[4]}`,
+                dough: `$${recipes[1].peperoni*sum._sum.peperoni*costsNumber[3]}`,
+                sauce: `$${recipes[0].peperoni*sum._sum.peperoni*costsNumber[1]}`,
             },
             branco:  {
-                peperoniSlice: `${recipes[3].branco*sum._sum.branco} ${recipes[3].name} ${recipes[3].unit}`,
-                cheese: `${recipes[2].branco*sum._sum.branco} ${recipes[2].name} ${recipes[2].unit}`,
-                vedgetable: `${recipes[4].branco*sum._sum.branco} ${recipes[4].name} ${recipes[4].unit}`,
-                dough: `${recipes[1].branco*sum._sum.branco} ${recipes[1].name} ${recipes[1].unit}`,
-                sauce: `${recipes[0].branco*sum._sum.branco} ${recipes[0].name} ${recipes[0].unit}`,
+                peperoniSlice: `$${recipes[3].branco*sum._sum.branco*costsNumber[2]}`,
+                cheese: `$${recipes[2].branco*sum._sum.branco*costsNumber[0]}`,
+                vedgetable: `$${recipes[4].branco*sum._sum.branco*costsNumber[4]}`,
+                dough: `$${recipes[1].branco*sum._sum.branco*costsNumber[3]}`,
+                sauce: `$${recipes[0].branco*sum._sum.branco*costsNumber[1]}`,
             },
             allDressed:  {
-                peperoniSlice: `${recipes[3].alldressed*sum._sum.alldressed} ${recipes[3].name} ${recipes[3].unit}`,
-                cheese: `${recipes[2].alldressed*sum._sum.alldressed} ${recipes[2].name} ${recipes[2].unit}`,
-                vedgetable: `${recipes[4].alldressed*sum._sum.alldressed} ${recipes[4].name} ${recipes[4].unit}`,
-                dough: `${recipes[1].alldressed*sum._sum.alldressed} ${recipes[1].name} ${recipes[1].unit}`,
-                sauce: `${recipes[0].alldressed*sum._sum.alldressed} ${recipes[0].name} ${recipes[0].unit}`,
+                peperoniSlice: `$${recipes[3].alldressed*sum._sum.alldressed*costsNumber[2]}`,
+                cheese: `$${recipes[2].alldressed*sum._sum.alldressed*costsNumber[0]}`,
+                vedgetable: `$${recipes[4].alldressed*sum._sum.alldressed*costsNumber[4]}`,
+                dough: `$${recipes[1].alldressed*sum._sum.alldressed*costsNumber[3]}`,
+                sauce: `$${recipes[0].alldressed*sum._sum.alldressed*costsNumber[1]}`,
             },
         }
     }
