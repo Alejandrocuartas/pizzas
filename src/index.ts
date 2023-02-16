@@ -7,7 +7,7 @@ import { readFileSync } from "fs";
 import resolvers from "./graphql/resolvers";
 import app from "./server";
 
-const httpServer = http.createServer(app);
+export const httpServer = http.createServer(app);
 const typeDefs = readFileSync(
     path.join(__dirname, "graphql/schema.graphql"),
     "utf8"
@@ -24,7 +24,7 @@ export const server = new ApolloServer({
     introspection: true
 });
 
-export const runServer = async() => {
+const runServer = async() => {
     await server.start();
     // More required logic for integrating with Express
     server.applyMiddleware({
