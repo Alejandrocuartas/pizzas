@@ -19,7 +19,7 @@ input TimePeriod {
     startDay: String!  
     endMonth: String!  
     endDay: String!  
-    week: Int  //optional: increments the given period by the number of weeks specified
+    week: Int  //optional: increments the given period by the number of weeks specified  
 }
 
 #### Example
